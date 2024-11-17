@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visão do Código do Sistema de Cadastro e Login</title>
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+    <header>
+        <h1>Sistema de Cadastro e Login</h1>
+        <p>Veja os códigos utilizados no cadastro e login de usuários</p>
+    </header>
+
+    <main>
+
+
+        <section>
+            <h2>Código de Cadastro no PHP (cadastrar.php)</h2>
+            <p>Aqui está o código PHP que processa o cadastro do usuário e armazena os dados no <a href="#">banco de dados</a>.</p>
+            <div class="code">
+<span class="keyword">&lt;?php</span><br><br>
+
+// <span class="comment">Conexão com o banco de dados</span><br>
+$conexao = new <span class="keyword">mysqli</span>('localhost', 'usuario', 'senha', 'cadastro');<br><br>
+
+// <span class="comment">Verifica se a conexão foi bem-sucedida</span><br>
+<span class="keyword">if</span> ($conexao->connect_error) {<br>
+<span class="keyword">die</span>(<span class="string">"Conexão falhou: "</span> . $conexao->connect_error);<br>
+}<br><br>
+
+// <span class="comment">Recebe os dados do formulário</span><br>
+$nome = $_POST['nome'];<br>
+$email = $_POST['email'];<br>
+$senha = <span class="keyword">password_hash</span>($_POST['senha'], <span class="string">PASSWORD_DEFAULT</span>);<br><br>
+
+// <span class="comment">Insere os dados na tabela 'usuarios'</span><br>
+$sql = <span class="string">"INSERT INTO usuarios (nome, email, senha) VALUES ('$nome', '$email', '$senha')"</span>;<br><br>
+
+<span class="keyword">if</span> ($conexao->query($sql) === <span class="keyword">TRUE</span>) {<br>
+echo <span class="string">"Cadastro realizado com sucesso!"</span>;<br>
+} <span class="keyword">else</span> {<br>
+echo <span class="string">"Erro: "</span> . $sql . <span class="string">"<br>"</span> . $conexao->error;<br>
+}<br><br>
+
+$conexao->close();<br>
+<span class="keyword">?&gt;</span>
+            </div>
+            
+        </section>
+
+        <section>
+            <h2>5. Código de Login no PHP (login.php)</h2>
+            <p>Aqui está o código PHP que processa o login do usuário e verifica se as credenciais estão corretas.</p>
+            <div class="code">
+<span class="keyword">&lt;?php</span><br><br>
+// <span class="comment">Conexão com o banco de dados</span><br>
+$conexao = new <span class="keyword">mysqli</span>('localhost', 'usuario', 'senha', 'cadastro');<br><br>
+
+<span class="keyword">if</span> ($conexao->connect_error) {<br>
+<span class="keyword">die</span>("Conexão falhou: " . $conexao->connect_error);<br>
+}<br><br>
+
+// <span class="comment">Recebe os dados do formulário</span><br>
+$nome = $_POST['nome'];<br>
+$email = $_POST['email'];<br>
+$senha = <span class="keyword">password_hash</span>($_POST['senha'], <span class="string">PASSWORD_DEFAULT</span>);<br><br>
+
+// <span class="comment">Insere os dados na tabela 'usuarios'</span><br>
+$sql = <span class="string">"INSERT INTO usuarios (nome, email, senha) VALUES ('$nome', '$email', '$senha')"</span>;<br><br>
+
+<span class="keyword">if</span> ($conexao->query($sql) === <span class="keyword">TRUE</span>) {<br>
+echo <span class="string">"Cadastro realizado com sucesso!"</span>;<br>
+} <span class="keyword">else</span> {<br>
+echo <span class="string">"Erro: "</span> . $sql . <span class="string">"<br>"</span> . $conexao->error;<br>
+}<br><br>
+
+$conexao->close();<br>
+<span class="keyword">?&gt;</span>
+            </div>
+            
+        </section>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Meu Site. Todos os direitos reservados.</p>
+    </footer>
+
+</body>
+
+</html>
