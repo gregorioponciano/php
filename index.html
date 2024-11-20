@@ -4,129 +4,161 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Visão do Código do Sistema de Cadastro e Login</title>
+    <title>Estrutura do Sistema</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-
     <header>
         <h1>Sistema de Cadastro e Login</h1>
-        <p>Veja os códigos utilizados no cadastro e login de usuários</p>
+        <p>Visualize o código completo do sistema, separado por arquivos.</p>
     </header>
 
     <main>
-        <!-- Seção de Conexão com o Banco de Dados -->
+        <!-- Seção 1: Arquivo conexao.php -->
         <section>
-            <h2>1. Conexão com o Banco de Dados (conexao.php)</h2>
-            <p>Crie o arquivo <strong>conexao.php</strong> para gerenciar a conexão com o <a href="https://gregorioponciano.github.io/mysql/index.html">banco de dados</a>.</p>
+            <h2>1. Arquivo de Conexão (conexao.php)</h2>
+            <p>Gerencia a conexão ao banco de dados.</p>
             <div class="code">
                 <span class="keyword">&lt;?php</span><br>
-                <span class="comment">// Arquivo de conexão com o banco de dados</span><br>
-                <span class="variable">$host</span> = <span class="string">'localhost'</span>;<br>
-                <span class="variable">$user</span> = <span class="string">'root'</span>;<br>
+                <span class="comment">// Dados para conexão com o banco de dados</span><br>
+                <span class="variable">$servername</span> = <span class="string">'localhost'</span>;<br>
+                <span class="variable">$username</span> = <span class="string">'root'</span>;<br>
                 <span class="variable">$password</span> = <span class="string">''</span>;<br>
                 <span class="variable">$dbname</span> = <span class="string">'cadastro'</span>;<br><br>
 
-                <span class="comment">// Conexão</span><br>
-                <span class="variable">$conn</span> = <span class="keyword">new</span> <span class="function">mysqli</span>($host, $user, $password, $dbname);<br>
+                <span class="comment">// Conectando ao banco de dados</span><br>
+                <span class="variable">$conn</span> = <span class="keyword">new</span> <span class="function">mysqli</span>($servername, $username, $password, $dbname);<br>
                 <span class="keyword">if</span> ($conn->connect_error) {<br>
-                &emsp;<span class="function">die</span>(<span class="string">"Erro na conexão: "</span> . $conn->connect_error);<br>
+                &emsp;<span class="function">die</span>(<span class="string">"Falha na conexão: "</span> . $conn->connect_error);<br>
                 }<br>
                 <span class="keyword">?&gt;</span>
             </div>
         </section>
 
-        <!-- Seção de Cadastro -->
+        <!-- Seção 2: Arquivo cadastro.php -->
         <section>
-            <h2>2. Código de Cadastro (cadastrar.php)</h2>
-            <p>Código PHP que processa o cadastro e armazena os dados no banco de dados.</p>
+            <h2>2. Código de Cadastro (cadastro.php)</h2>
+            <p>Insere os dados do usuário no banco de dados.</p>
             <div class="code">
                 <span class="keyword">&lt;?php</span><br>
                 <span class="function">include</span>(<span class="string">'conexao.php'</span>);<br><br>
 
-                <span class="comment">// Receber dados</span><br>
-                <span class="variable">$nome</span> = $_POST[<span class="string">'nome'</span>];<br>
-                <span class="variable">$email</span> = $_POST[<span class="string">'email'</span>];<br>
-                <span class="variable">$senha</span> = <span class="function">password_hash</span>($_POST[<span class="string">'senha'</span>], <span class="keyword">PASSWORD_DEFAULT</span>);<br><br>
+                <span class="comment">// Verifica se o formulário foi enviado</span><br>
+                <span class="keyword">if</span> ($_SERVER[<span class="string">"REQUEST_METHOD"</span>] == <span class="string">"POST"</span>) {<br>
+                &emsp;<span class="variable">$nome</span> = $_POST[<span class="string">'nome'</span>];<br>
+                &emsp;<span class="variable">$email</span> = $_POST[<span class="string">'email'</span>];<br>
+                &emsp;<span class="variable">$senha</span> = <span class="function">password_hash</span>($_POST[<span class="string">'senha'</span>], <span class="keyword">PASSWORD_BCRYPT</span>);<br><br>
 
-                <span class="comment">// Inserção no banco</span><br>
-                <span class="variable">$sql</span> = <span class="string">"INSERT INTO usuarios (nome, email, senha) VALUES ('$nome', '$email', '$senha')"</span>;<br>
-                <span class="keyword">if</span> ($conn->query($sql) === <span class="keyword">TRUE</span>) {<br>
-                &emsp;<span class="function">echo</span> <span class="string">"Cadastro realizado com sucesso!"</span>;<br>
-                } <span class="keyword">else</span> {<br>
-                &emsp;<span class="function">echo</span> <span class="string">"Erro: "</span> . $conn->error;<br>
-                }<br>
-                <span class="keyword">?&gt;</span>
-            </div>
-        </section>
-
-        <!-- Seção de Login -->
-        <section>
-            <h2>3. Código de Login (login.php)</h2>
-            <p>Verifica as credenciais do usuário e cria uma sessão ao realizar o login.</p>
-            <div class="code">
-                <span class="keyword">&lt;?php</span><br>
-                <span class="function">session_start</span>();<br>
-                <span class="function">include</span>(<span class="string">'conexao.php'</span>);<br><br>
-
-                <span class="variable">$email</span> = $_POST[<span class="string">'email'</span>];<br>
-                <span class="variable">$senha</span> = $_POST[<span class="string">'senha'</span>];<br><br>
-
-                <span class="variable">$sql</span> = <span class="string">"SELECT * FROM usuarios WHERE email = '$email'"</span>;<br>
-                <span class="variable">$result</span> = $conn->query($sql);<br>
-                <span class="keyword">if</span> ($result->num_rows > 0) {<br>
-                &emsp;<span class="variable">$user</span> = $result->fetch_assoc();<br>
-                &emsp;<span class="keyword">if</span> (<span class="function">password_verify</span>($senha, $user[<span class="string">'senha'</span>])) {<br>
-                &emsp;&emsp;<span class="function">$_SESSION</span>[<span class="string">'user'</span>] = $user[<span class="string">'nome'</span>];<br>
-                &emsp;&emsp;<span class="function">header</span>(<span class="string">'Location: protegido.php'</span>);<br>
+                &emsp;<span class="comment">// Inserindo no banco</span><br>
+                &emsp;<span class="variable">$sql</span> = <span class="string">"INSERT INTO usuarios (nome, email, senha) VALUES ('$nome', '$email', '$senha')"</span>;<br>
+                &emsp;<span class="keyword">if</span> ($conn->query($sql) === <span class="keyword">TRUE</span>) {<br>
+                &emsp;&emsp;<span class="function">echo</span> <span class="string">"Cadastro realizado com sucesso!"</span>;<br>
                 &emsp;} <span class="keyword">else</span> {<br>
-                &emsp;&emsp;<span class="function">echo</span> <span class="string">"Senha incorreta!"</span>;<br>
+                &emsp;&emsp;<span class="function">echo</span> <span class="string">"Erro ao cadastrar: "</span> . $conn->error;<br>
                 &emsp;}<br>
-                } <span class="keyword">else</span> {<br>
-                &emsp;<span class="function">echo</span> <span class="string">"Usuário não encontrado!"</span>;<br>
                 }<br>
                 <span class="keyword">?&gt;</span>
             </div>
         </section>
 
-        <!-- Seção de Logout -->
+        <!-- Seção 3: Arquivo index.php -->
         <section>
-            <h2>4. Código de Logout (logout.php)</h2>
-            <p>Finaliza a sessão do usuário e redireciona para a página de login.</p>
+            <h2>3. Página Inicial (index.php)</h2>
+            <p>Formulários para cadastro e login de usuários.</p>
             <div class="code">
-                <span class="keyword">&lt;?php</span><br>
-                <span class="function">session_start</span>();<br>
-                <span class="function">session_unset</span>();<br>
-                <span class="function">session_destroy</span>();<br>
-                <span class="function">header</span>(<span class="string">'Location: login.html'</span>);<br>
-                <span class="keyword">exit</span>;<br>
-                <span class="keyword">?&gt;</span>
+                <span class="keyword">&lt;!DOCTYPE html&gt;</span><br>
+                <span class="keyword">&lt;html lang="pt-BR"&gt;</span><br>
+                <span class="keyword">&lt;head&gt;</span><br>
+                &emsp;<span class="function">meta charset</span>=<span class="string">"UTF-8"</span>;<br>
+                &emsp;<span class="function">title</span>=<span class="string">"Cadastro e Login"</span>;<br>
+                <span class="keyword">&lt;/head&gt;</span><br>
+                <span class="keyword">&lt;body&gt;</span><br>
+                &emsp;<span class="function">form action</span>=<span class="string">"cadastro.php"</span><span class="comment">// Formulário de cadastro</span><br>
+                &emsp;<span class="function">form action</span>=<span class="string">"login.php"</span><span class="comment">// Formulário de login</span><br>
+                <span class="keyword">&lt;/body&gt;</span><br>
+                <span class="keyword">&lt;/html&gt;</span>
             </div>
         </section>
 
-        <!-- Seção de Página Protegida -->
-        <section>
-            <h2>5. Página Protegida (protegido.php)</h2>
-            <p>Página que só pode ser acessada por usuários logados.</p>
-            <div class="code">
-                <span class="keyword">&lt;?php</span><br>
-                <span class="function">session_start</span>();<br>
-                <span class="keyword">if</span> (!<span class="function">isset</span>(<span class="function">$_SESSION</span>[<span class="string">'user'</span>])) {<br>
-                &emsp;<span class="function">header</span>(<span class="string">'Location: login.html'</span>);<br>
-                &emsp;<span class="function">exit</span>;<br>
-                }<br>
-                <span class="function">echo</span> <span class="string">"Bem-vindo, "</span> . <span class="function">$_SESSION</span>[<span class="string">'user'</span>];<br>
-                <span class="keyword">?&gt;</span>
-            </div>
-        </section>
-
-    </main>
-
-    <footer>
-        <p>&copy; 2024 Meu Site. Todos os direitos reservados.</p>
-    </footer>
-
+             <!-- Seção 4: Arquivo login.php -->
+             <section>
+                <h2>4. Código de Login (login.php)</h2>
+                <p>Verifica as credenciais do usuário para acesso ao sistema.</p>
+                <div class="code">
+                    <span class="keyword">&lt;?php</span><br>
+                    <span class="function">include</span>(<span class="string">'conexao.php'</span>);<br>
+                    <span class="function">session_start</span>();<br><br>
+    
+                    <span class="comment">// Verifica se o formulário foi enviado</span><br>
+                    <span class="keyword">if</span> ($_SERVER[<span class="string">"REQUEST_METHOD"</span>] == <span class="string">"POST"</span>) {<br>
+                    &emsp;<span class="variable">$email</span> = $_POST[<span class="string">'email'</span>];<br>
+                    &emsp;<span class="variable">$senha</span> = $_POST[<span class="string">'senha'</span>];<br><br>
+    
+                    &emsp;<span class="comment">// Consulta no banco de dados</span><br>
+                    &emsp;<span class="variable">$sql</span> = <span class="string">"SELECT * FROM usuarios WHERE email='$email'"</span>;<br>
+                    &emsp;<span class="variable">$result</span> = $conn->query($sql);<br><br>
+    
+                    &emsp;<span class="keyword">if</span> ($result->num_rows > 0) {<br>
+                    &emsp;&emsp;<span class="variable">$usuario</span> = $result->fetch_assoc();<br>
+                    &emsp;&emsp;<span class="keyword">if</span> (<span class="function">password_verify</span>($senha, $usuario[<span class="string">'senha'</span>])) {<br>
+                    &emsp;&emsp;&emsp;<span class="comment">// Inicia sessão e redireciona</span><br>
+                    &emsp;&emsp;&emsp;$_SESSION[<span class="string">'id'</span>] = $usuario[<span class="string">'id'</span>];<br>
+                    &emsp;&emsp;&emsp;<span class="function">header</span>(<span class="string">"Location: protegido.php"</span>);<br>
+                    &emsp;&emsp;} <span class="keyword">else</span> {<br>
+                    &emsp;&emsp;&emsp;<span class="function">echo</span> <span class="string">"Senha incorreta!"</span>;<br>
+                    &emsp;&emsp;}<br>
+                    &emsp;} <span class="keyword">else</span> {<br>
+                    &emsp;&emsp;<span class="function">echo</span> <span class="string">"Usuário não encontrado!"</span>;<br>
+                    &emsp;}<br>
+                    }<br>
+                    <span class="keyword">?&gt;</span>
+                </div>
+            </section>
+    
+            <!-- Seção 5: Arquivo logout.php -->
+            <section>
+                <h2>5. Código de Logout (logout.php)</h2>
+                <p>Finaliza a sessão do usuário e redireciona para a página inicial.</p>
+                <div class="code">
+                    <span class="keyword">&lt;?php</span><br>
+                    <span class="function">session_start</span>();<br>
+                    <span class="function">session_unset</span>();<br>
+                    <span class="function">session_destroy</span>();<br>
+                    <span class="function">header</span>(<span class="string">"Location: index.html"</span>);<br>
+                    <span class="function">exit</span>;<br>
+                    <span class="keyword">?&gt;</span>
+                </div>
+            </section>
+    
+            <!-- Seção 6: Arquivo protegido.php -->
+            <section>
+                <h2>6. Página Protegida (protegido.php)</h2>
+                <p>Área restrita acessível apenas para usuários logados.</p>
+                <div class="code">
+                    <span class="keyword">&lt;?php</span><br>
+                    <span class="function">session_start</span>();<br><br>
+    
+                    <span class="comment">// Verifica se o usuário está logado</span><br>
+                    <span class="keyword">if</span> (!isset($_SESSION[<span class="string">'id'</span>])) {<br>
+                    &emsp;<span class="function">header</span>(<span class="string">"Location: index.html"</span>);<br>
+                    &emsp;<span class="function">exit</span>;<br>
+                    }<br><br>
+    
+                    <span class="comment">// Conteúdo da página</span><br>
+                    <span class="keyword">&lt;!DOCTYPE html&gt;</span><br>
+                    <span class="keyword">&lt;html&gt;</span><br>
+                    &emsp;<span class="keyword">&lt;head&gt;</span><br>
+                    &emsp;&emsp;<span class="function">title</span>=<span class="string">"Página Protegida"</span>;<br>
+                    &emsp;&lt;/head&gt;<br>
+                    &emsp;<span class="keyword">&lt;body&gt;</span><br>
+                    &emsp;&emsp;<span class="function">echo</span> <span class="string">"Bem-vindo à página protegida!"</span>;<br>
+                    &emsp;&emsp;&lt;a href=<span class="string">'logout.php'</span>&gt;Sair&lt;/a&gt;<br>
+                    &emsp;&lt;/body&gt;<br>
+                    <span class="keyword">&lt;/html&gt;</span><br>
+                    <span class="keyword">?&gt;</span>
+                </div>
+            </section>
+                
 </body>
-
 </html>
