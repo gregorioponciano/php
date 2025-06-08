@@ -1,0 +1,12 @@
+@charset "UTF-8";
+
+body {background-color: rgba(0, 0, 0, 0.781);
+color: white;}
+
+main {
+    background-color: blue;
+    width: 50vw;
+    margin: auto;
+    padding: 10px;
+    text-align: center;
+}
