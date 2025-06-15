@@ -3,25 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>conversor de moedas</title>
+    <title>Resultado da Conversão</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <header>
-    
+    <h1>Resultado da Conversão</h1>
     <p>
         <?php
-                       //cotação copiada do google
-                       $cotação = 5.50;   
-                       // quanstos $$ você tem?
-                       $real = $_REQUEST["din"] ?? 0;  
-                       // Equivalencia do dolar
-                       $dolar = $real / $cotação;
-                    $padrao = numfmt_create("pt_BR", NumberFormatter::CURRENCY);
-                    echo "Seus " . numfmt_format_currency($padrao, $real, "BRL") . " equivalem a " . numfmt_format_currency($padrao, $dolar, "USD");
+            // Cotação do dólar (valor fixo ou você pode buscar via API depois)
+            $cotacao = 5.50;
+
+            // Recebe o valor via GET
+            $real = $_GET["din"] ?? 0;
+
+            // Faz a conversão
+            $dolar = $real / $cotacao;
+
+            // Usa formatação internacional
+            $padrao = numfmt_create("pt_BR", NumberFormatter::CURRENCY);
+
+            // Exibe o resultado
+            echo "Seus <strong>" . numfmt_format_currency($padrao, $real, "BRL") . "</strong> equivalem a <strong>" . numfmt_format_currency($padrao, $dolar, "USD") . "</strong>";
         ?>
     </p>
+    <a href="index.html">Voltar</a> <!-- Ou ajuste o nome se sua página for outra -->
 </header>
-    
+
 </body>
 </html>

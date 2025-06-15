@@ -1,0 +1,4 @@
+C:\xampp\php\php.ini
+
+
+;extension=intl    (remova o ;)

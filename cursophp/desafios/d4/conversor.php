@@ -11,7 +11,7 @@
     
     <p>
         <?php
-                //cotação vinda da  API do bvanco central
+                //cotação vinda da  API do banco central
                 //$inicio = date("Y-m-d", strtotime("-7 days"));
                 //$fim =  date("Y-m-d");
                 
