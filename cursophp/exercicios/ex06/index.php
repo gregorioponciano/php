@@ -9,7 +9,7 @@
 <body>
 
         <?php
-        //formulario retroalimentado
+        //formulario retroalimentado (captura os dados)
         $v1 = $_GET['v1'] ?? 0;
         $v2 = $_GET['v2'] ?? 0;
         ?>
@@ -18,7 +18,7 @@
             <h1>Somador de valores</h1>
             <form action="<?=$_SERVER['PHP_SELF'] ?>" method="get">
                 <label for="v1">valor 1</label>
-                <input type="number" name="v1" id="v1" value="<?=$v1?>">
+                <input type="number" name="v1" id="v1" value="<?=$v1?>"> <!--mantem o valor digitado dentro do input -->
                 <label for="v2">valor 2</label>
                 <input type="number" name="v2" id="v2" value="<?=$v2?>">
                 <input type="submit" value="somar">
@@ -31,7 +31,7 @@
                 <?php 
                 
 
-                $resultado = $v1 + $v2;;
+                $resultado = $v1 + $v2;
 
                 echo "<p>A soma entre os valores $v1 e $v2 é igual $resultado</p>" ;                ?>
             </div>
