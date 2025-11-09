@@ -33,7 +33,7 @@
 
                 $resultado = $v1 + $v2;
 
-                echo "<p>A soma entre os valores $v1 e $v2 é igual $resultado</p>" ;                ?>
+                echo "<p>A soma entre os valores $v1 e $v2 é igual $resultado</p>" ;?>
             </div>
         </section>
 
